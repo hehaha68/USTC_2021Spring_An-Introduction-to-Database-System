@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>银行业务管理系统</title>
+<link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<script>
+    function tableFilter() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("prependedInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("bank-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function openForm1(key) {
+      document.getElementById("updateForm1").style.display = "block";
+      update_form1.key.value = key;
+    }
+	  
+	function openForm2(key) {
+      document.getElementById("updateForm2").style.display = "block";
+      update_form2.key.value = key;
+    }
+
+    function closeForm1() {
+      document.getElementById("updateForm1").style.display = "none";
+    }
+	  
+	function closeForm2() {
+      document.getElementById("updateForm2").style.display = "none";
+    }
+  
+	  
+    function openwForm1(key) {
+      document.getElementById("deleteWarning1").style.display = "block";
+      delete_form1.key.value = key;
+    }
+	  
+	function openwForm2(key) {
+      document.getElementById("deleteWarning2").style.display = "block";
+      delete_form2.key.value = key;
+    }
+
+    function closewForm1() {
+      document.getElementById("deleteWarning1").style.display = "none";
+    } 
+	  
+	function closewForm2() {
+      document.getElementById("deleteWarning2").style.display = "none";
+    } 
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="updateForm1">
+  <form class="form-container" name="update_form1" method="POST">
+    <h2>更新表单</h2>
+    <input type="hidden" name="type" value="update1">
+    <input type="hidden" name="key" value="">
+    <input type="text" placeholder="客户姓名" name="name" required="">
+    <input type="text" placeholder="客户电话" name="phone" required="">
+    <input type="text" placeholder="客户住址" name="address" required="">
+    <input type="text" placeholder="联系人姓名" name="cname" required="">
+    <input type="text" placeholder="联系人电话" name="cphone" required="">
+    <input type="text" placeholder="联系人邮箱" name="cemail" required="">
+    <input type="text" placeholder="关系" name="crelation" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm1()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="updateForm2">
+  <form class="form-container" name="update_form2" method="POST">
+    <h1>更新表单</h1>
+    <input type="hidden" name="type" value="update2">
+    <input type="hidden" name="key" value="">
+    <input type="text" placeholder="员工ID" name="staffId" required="">
+    <input type="text" placeholder="服务类型" name="Type" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm2()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning1">
+  <form class="form-container" name="delete_form1" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete1">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm1();">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning2">
+  <form class="form-container" name="delete_form2" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete2">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm2();">取消</button>
+  </form>
+</div>
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span> </header>
+<div class="app-body">
+<div class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-title">银行业务管理系统</li>
+      <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="bank"> <i class="nav-icon icon-puzzle"></i> 支行管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="employee"> <i class="nav-icon icon-cursor"></i> 员工管理</a> </li>
+      <li class="nav-item"> <a class="nav-link" href="client"> <i class="nav-icon icon-cursor"></i> 客户管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="account"> <i class="nav-icon icon-star"></i> 账户管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="debt"> <i class="nav-icon icon-bell"></i> 贷款管理</a> </li>
+      <li class="nav-item"> <a class="nav-link nav-dropdown-toggle" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 <span class="badge badge-primary"></span> </a> </li>
+    </ul>
+  </nav>
+  <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>
+<main class="main">
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="input-prepend input-group">
+      <div class="insert-container">
+        <form class="form-insert" method="POST">
+          <input type="hidden" name="type" value="query1">
+          <input type="text" placeholder="客户ID" name="clientID" size="5">
+          <input type="text" placeholder="客户姓名" name="name" size="5">
+          <input type="text" placeholder="客户电话" name="phone" size="8">
+          <input type="text" placeholder="客户地址" name="address" size="8">
+          <input type="text" placeholder="联系人姓名" name="cname" size="8">
+          <input type="text" placeholder="联系人电话" name="cphone" size="8">
+          <input type="text" placeholder="联系人邮箱" name="cemail" size="8">
+          <input type="text" placeholder="关系" name="crelation" size="8">
+          <button class="btn btn-info" type="submit">查询</button>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-5">
+            <h4 class="card-title mb-0">客户管理</h4>
+            <div class="small text-muted">2021 6</div>
+          </div>
+        </div>
+        <div> 
+          <div>
+            <table id="bank-table">
+              <tr> {% for i in labels1 %}
+                <th> {{ i }} </th>
+                {% endfor %}
+                <th>操作</th>
+              </tr>
+              {% for i in content1 %}
+              <tr id="{{ i.Client.C_ID }}">
+                <td> {{ i.Client.C_ID }} </td>
+                <td> {{ i.Client.C_Name }} </td>
+                <td> {{ i.Client.C_Tel }} </td>
+                <td> {{ i.Client.C_Addr }} </td>
+                <td> {{ i.Contact.Co_Name }} </td>
+                <td> {{ i.Contact.Co_Tel }} </td>
+                <td> {{ i.Contact.Co_Email }} </td>
+                <td> {{ i.Contact.Relation }} </td>
+                <td><label class="btn btn-success" onclick="openForm1(this.parentNode.parentNode.id)">更新</label>
+                  <label class="btn bg-danger" onclick="openwForm1(this.parentNode.parentNode.id)">删除</label></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="insert-container">
+        <form class="form-insert" method="POST">
+          <input type="hidden" name="type" value="insert1">
+          <input type="text" placeholder="客户ID" name="clientID" size="5">
+          <input type="text" placeholder="客户姓名" name="name" size="5">
+          <input type="text" placeholder="客户电话" name="phone" size="8">
+          <input type="text" placeholder="客户地址" name="address" size="8">
+          <input type="text" placeholder="联系人姓名" name="cname" size="8">
+          <input type="text" placeholder="联系人电话" name="cphone" size="8">
+          <input type="text" placeholder="联系人邮箱" name="cemail" size="8">
+          <input type="text" placeholder="关系" name="crelation" size="8">
+          <button class="btn btn-warning" type="submit">添加</button>
+        </form>
+      </div>
+    </div>
+    <div class="animated fadeIn">
+      <div class="input-prepend input-group">
+        <div class="insert-container">
+          <form method="POST" class="form-insert">
+            <input type="hidden" name="type" value="query2">
+            <input type="text" placeholder="客户ID" name="clientID" size="5">
+            <input type="text" placeholder="员工ID" name="staffId" size="5">
+            <input type="text" placeholder="服务类型" name="Type" size="8">
+            <button class="btn btn-info" type="submit">查询</button>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <h4 class="card-title mb-0">服务关系</h4>
+              <div class="small text-muted">2021 6</div>
+            </div>
+            <div class="col-sm-7 d-none d-md-block"> </div>
+          </div>
+          <div> 
+            
+            <div>
+              <table id="bank-table">
+                <tr> {% for i in labels2 %}
+                  <th> {{ i }} </th>
+                  {% endfor %}
+                  <th>操作</th>
+                </tr>
+                {% for i in content2 %}
+                <tr id="{{ i.Client.C_ID }}">
+                  <td> {{ i.Client.C_ID }} </td>
+                  <td> {{ i.Service.E_ID }} </td>
+                  <td> {{ i.Service.S_Type }} </td>
+                  <td><label class="btn btn-success" onclick="openForm2(this.parentNode.parentNode.id)">更新</label>
+                    <label class="btn bg-danger" onclick="openwForm2(this.parentNode.parentNode.id)">删除</label></td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="insert-container">
+          <form method="POST" class="form-insert">
+            <input type="hidden" name="type" value="insert2">
+            <input type="text" placeholder="客户ID" name="clientID" required="" size="5">
+            <input type="text" placeholder="员工ID" name="staffId" required="" size="5">
+            <input type="text" placeholder="服务类型" name="Type" required="" size="5">
+            <button class="btn bg-warning" type="submit">添加</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
+  <aside class="aside-menu">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+    </ul>
+    
+  </aside>
+</div>
+</body>
+</html>

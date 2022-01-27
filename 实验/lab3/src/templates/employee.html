@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>银行业务管理系统</title>
+<link href=" {{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<script>
+    function tableFilter() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("prependedInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("bank-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function openForm1(key) {
+      document.getElementById("updateForm1").style.display = "block";
+      update_form1.key.value = key;
+    }
+	  
+	function openForm2(key) {
+      document.getElementById("updateForm2").style.display = "block";
+      update_form2.key.value = key;
+    }
+
+    function closeForm1() {
+      document.getElementById("updateForm1").style.display = "none";
+    }
+	  
+	function closeForm2() {
+      document.getElementById("updateForm2").style.display = "none";
+    }
+  
+	  
+    function openwForm1(key) {
+      document.getElementById("deleteWarning1").style.display = "block";
+      delete_form1.key.value = key;
+    }
+	  
+	function openwForm2(key) {
+      document.getElementById("deleteWarning2").style.display = "block";
+      delete_form2.key.value = key;
+    }
+
+    function closewForm1() {
+      document.getElementById("deleteWarning1").style.display = "none";
+    } 
+	  
+	function closewForm2() {
+      document.getElementById("deleteWarning2").style.display = "none";
+    } 
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="updateForm1">
+  <form class="form-container" name="update_form1" method="POST">
+    <h2>更新表单</h2>
+    <input type="hidden" name="type" value="update1">
+    <input type="hidden" name="key" value="">
+    <label for="email"><b>员工电话</b></label>
+    <input type="text" placeholder="员工电话" name="phone" required>
+    <label for="email"><b>员工住址</b></label>
+    <input type="text" placeholder="员工住址" name="address" required>
+    <label for="email"><b>所在支行</b></label>
+    <input type="text" placeholder="所在支行" name="bank" required>
+    <label for="email"><b>部门号</b></label>
+    <input type="text" placeholder="部门号" name="departId" required>
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm1()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="updateForm2">
+  <form class="form-container" name="update_form2" method="POST">
+    <h2>更新表单</h2>
+    <input type="hidden" name="type" value="update2">
+    <input type="hidden" name="key" value="">
+    <label for="email"><b>部门名称</b></label>
+    <input type="text" placeholder="部门名称" name="departName" required>
+    <label for="email"><b>部门类型</b></label>
+    <input type="text" placeholder="部门类型" name="departType" required>
+    <label for="email"><b>部门经理ID</b></label>
+    <input type="text" placeholder="部门经理ID" name="ManagerId" required>
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm2()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning1">
+  <form class="form-container" name="delete_form1" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete1">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm1();">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning2">
+  <form class="form-container" name="delete_form2" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete2">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm2();">取消</button>
+  </form>
+</div>
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span> </header>
+<div class="app-body">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+        <li class="nav-title">银行业务管理系统</li>
+        <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="bank"> <i class="nav-icon icon-puzzle"></i> 支行管理</a> </li>
+        <li class="nav-item"> <a class="nav-link" href="employee"> <i class="nav-icon icon-pie-chart"></i> 员工管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="client"> <i class="nav-icon icon-cursor"></i> 客户管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="account"> <i class="nav-icon icon-star"></i> 账户管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="debt"> <i class="nav-icon icon-bell"></i> 贷款管理</a> </li>
+        <li class="nav-item"> <a class="nav-link nav-dropdown-toggle" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 <span class="badge badge-primary"></span> </a> </li>
+      </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+  </div>
+  <main class="main">
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="input-prepend input-group">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="query1">
+              <input type="text" placeholder="员工ID" name="staffID" size="5">
+              <input type="text" placeholder="员工姓名" name="name" size="5">
+              <input type="text" placeholder="员工电话" name="phone" size="5">
+              <input type="text" placeholder="员工住址" name="address" size="5">
+              <input type="text" placeholder="雇佣日期" name="date" size="5">
+              <input type="text" placeholder="所在支行" name="bank" size="10">
+              <input type="text" placeholder="部门号" name="departId" size="5">
+              <input type="text" placeholder="部门名称" name="departName" size="5">
+              <input type="text" placeholder="部门类型" name="departType" size="5">
+              <input type="text" placeholder="部门经理ID" name="ManagerId" size="10">
+              <button class="btn btn-info" type="submit">查询</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-5">
+                <h4 class="card-title mb-0">员工管理</h4>
+                <div class="small text-muted">2021 6</div>
+                <div class="small text-muted">日期格式：****-**-** </div>
+              </div>
+            </div>
+            <div> 
+              <div>
+                <table id="bank-table">
+                  <tr> {% for i in labels1 %}
+                    <th> {{ i }} </th>
+                    {% endfor %}
+                    <th>操作</th>
+                  </tr>
+                  {% for i in content %}
+                  <tr id="{{ i.Employee.E_ID }}">
+                    <td> {{ i.Employee.E_ID }} </td>
+                    <td> {{ i.Employee.E_Name }} </td>
+                    <td> {{ i.Employee.E_Tel }} </td>
+                    <td> {{ i.Employee.E_Addr }} </td>
+                    <td> {{ i.Employee.Work_Date }} </td>
+                    <td> {{ i.Employee.B_Name }} </td>
+                    <td> {{ i.Employee.D_ID }} </td>
+                    <td> {{ i.Department.D_Name }} </td>
+                    <td> {{ i.Department.D_Type }} </td>
+                    <td> {{ i.Department.Manager_ID }} </td>
+                    <td><label class="btn btn-success" onclick="openForm1(this.parentNode.parentNode.id)">更新</label>
+                      <label class="btn bg-danger" onclick="openwForm1(this.parentNode.parentNode.id)">删除</label></td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="insert1">
+              <input type="text" placeholder="员工ID" name="staffID" size="5">
+              <input type="text" placeholder="员工姓名" name="name" size="5">
+              <input type="text" placeholder="员工电话" name="phone" size="5">
+              <input type="text" placeholder="员工住址" name="address" size="5">
+              <input type="text" placeholder="雇佣日期" name="date" size="5">
+              <input type="text" placeholder="所在支行" name="bank" size="10">
+              <input type="text" placeholder="部门号" name="departId" size="5">
+              <button class="btn btn-warning" type="submit">添加</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="animated fadeIn">
+        <div class="input-prepend input-group">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="query2">
+              <input type="text" placeholder="员工ID" name="staffID" size="5">
+              <input type="text" placeholder="员工姓名" name="name" size="5">
+              <input type="text" placeholder="员工电话" name="phone" size="5">
+              <input type="text" placeholder="员工住址" name="address" size="5">
+              <input type="text" placeholder="雇佣日期" name="date" size="5">
+              <input type="text" placeholder="所在支行" name="bank" size="10">
+              <input type="text" placeholder="部门号" name="departId" size="5">
+              <input type="text" placeholder="部门名称" name="departName" size="5">
+              <input type="text" placeholder="部门类型" name="departType" size="5">
+              <input type="text" placeholder="部门经理ID" name="ManagerId" size="10">
+              <button class="btn btn-info" type="submit">查询</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-5">
+                <h4 class="card-title mb-0">部门管理</h4>
+                <div class="small text-muted">2021 6</div>
+              </div>
+            </div>
+            <div> 
+              
+              <div>
+                <table id="bank-table">
+                  <tr> {% for i in labels2 %}
+                    <th> {{ i }} </th>
+                    {% endfor %}
+                    <th>操作</th>
+                  </tr>
+                  {% for i in content2 %}
+                  <tr id="{{ i.D_ID }}">
+                    <td> {{ i.D_ID }} </td>
+                    <td> {{ i.D_Name }} </td>
+                    <td> {{ i.D_Type }} </td>
+                    <td> {{ i.Manager_ID }} </td>
+                    <td><label class="btn btn-success" onclick="openForm2(this.parentNode.parentNode.id)">更新</label>
+                      <label class="btn bg-danger" onclick="openwForm2(this.parentNode.parentNode.id)">删除</label></td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="insert2">
+              <input type="text" placeholder="部门号" name="departId" size="5">
+              <input type="text" placeholder="部门名称" name="departName" size="5">
+              <input type="text" placeholder="部门类型" name="departType" size="5">
+              <input type="text" placeholder="部门经理ID" name="ManagerId" size="8">
+              <button class="btn btn-warning" type="submit">添加</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <aside class="aside-menu">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+    </ul>
+  </aside>
+</div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+<meta name="author" content="Łukasz Holeczek">
+<meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+<title>银行业务管理系统</title>
+<link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<script>
+    function tableFilter() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("prependedInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("bank-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function openSForm(key) {
+      document.getElementById("updateSForm").style.display = "block";
+      update_sform.key.value = key;
+    }
+
+    function openCForm(key) {
+      document.getElementById("updateCForm").style.display = "block";
+      update_cform.key.value = key;
+    }
+
+    function closeSForm() {
+      document.getElementById("updateSForm").style.display = "none";
+    }
+
+    function closeCForm() {
+      document.getElementById("updateCForm").style.display = "none";
+    }
+
+    function openwSForm(key) {
+      document.getElementById("deleteSWarning").style.display = "block";
+      delete_sform.key.value = key;
+    }
+
+    function closewSForm() {
+      document.getElementById("deleteSWarning").style.display = "none";
+    }
+
+    function openwCForm(key) {
+      document.getElementById("deleteCWarning").style.display = "block";
+      delete_cform.key.value = key;
+    }
+
+    function closewCForm() {
+      document.getElementById("deleteCWarning").style.display = "none";
+    } 
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="updateSForm">
+  <form class="form-container" name="update_sform" method="POST">
+    <h1>更新表单</h1>
+    <input type="hidden" name="key" value="">
+    <input type="hidden" name="type" value="supdate">
+    <label for="email"><b>账户余额</b></label>
+    <input type="text" placeholder="账户余额" name="sBalance" required="">
+    <label for="email"><b>利率</b></label>
+    <input type="text" placeholder="利率" name="sInterest" required="">
+    <label for="email"><b>货币类型</b></label>
+    <input type="text" placeholder="货币类型" name="sCType" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeSForm();">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="updateCForm">
+  <form class="form-container" name="update_cform" method="POST">
+    <h1>更新表单</h1>
+    <input type="hidden" name="key" value="">
+    <input type="hidden" name="type" value="cupdate">
+    <label for="email"><b>账户余额</b></label>
+    <input type="text" placeholder="账户余额" name="cBalance" required="">
+    <label for="email"><b>透支额度</b></label>
+    <input type="text" placeholder="透支额度" name="cOver" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeCForm();">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteSWarning">
+  <form class="form-container" name="delete_sform" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="sdelete">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewSForm();">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteCWarning">
+  <form class="form-container" name="delete_cform" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="cdelete">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewCForm();">取消</button>
+  </form>
+</div>
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span> </header>
+<div class="app-body">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+        <li class="nav-title">银行业务管理系统</li>
+        <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="bank"> <i class="nav-icon icon-puzzle"></i> 支行管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="employee"> <i class="nav-icon icon-cursor"></i> 员工管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="client"> <i class="nav-icon icon-cursor"></i> 客户管理</a> </li>
+        <li class="nav-item"> <a class="nav-link" href="account"> <i class="nav-icon icon-pie-chart"></i> 账户管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="debt"> <i class="nav-icon icon-bell"></i> 贷款管理</a> </li>
+        <li class="nav-item"> <a class="nav-link nav-dropdown-toggle" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 <span class="badge badge-primary"></span> </a> </li>
+      </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+  </div>
+  <main class="main">
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="input-prepend input-group">
+          <div class="insert-container">
+            <form method="POST" class="form-insert">
+              <input type="hidden" name="type" value="squery">
+              <input type="text" placeholder="账户号" name="accId" size="5">
+              <input type="text" placeholder="客户ID" name="clientID" size="5">
+              <input type="text" placeholder="客户姓名" name="clientName" size="5">
+              <input type="text" placeholder="开户支行" name="bank" size="8">
+              <input type="text" placeholder="开户时间" name="openDate" size="8">
+              <input type="text" placeholder="账户余额" name="balance" size="5">
+              <input type="text" placeholder="最近访问时间" name="VisitDate" size="10">
+              <input type="text" placeholder="利率" name="interest" size="5">
+              <input type="text" placeholder="货币类型" name="currType" size="5">
+              <button class="btn btn-info" type="submit">查询</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-5">
+                <h4 class="card-title mb-0">储蓄账户管理</h4>
+                <div class="small text-muted">2021 6</div>
+                <div class="small text-muted">日期格式：****-**-** </div>
+              </div>
+              <div class="col-sm-7 d-none d-md-block"> </div>
+            </div>
+            <div> 
+              <div>
+                <table id="bank-table">
+                  <tr> {% for i in labels1 %}
+                    <th> {{ i }} </th>
+                    {% endfor %}
+                    <th> 操作 </th>
+                  </tr>
+                  {% for i in content1 %}
+                  <tr id="{{ i.Account.A_ID }}">
+                    <td> {{ i.Account.A_ID }} </td>
+                    <td> {{ i.Client.C_ID }} </td>
+                    <td> {{ i.Client.C_Name }} </td>
+                    <td> {{ i.Account.B_Name }} </td>
+                    <td> {{ i.Account.Opening_Date }} </td>
+                    <td> {{ i.Account.Balance }} </td>
+                    <td> {{ i.Own.Visited_Date }} </td>
+                    <td> {{ i.SavingAccount.Interest_Rate }} </td>
+                    <td> {{ i.SavingAccount.Currency_Type }} </td>
+                    <td><label class="btn btn-success" onclick="openSForm(this.parentNode.parentNode.id)">更新</label>
+                      <label class="btn bg-danger" onclick="openwSForm(this.parentNode.parentNode.id)">删除</label></td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="animated fadeIn">
+          <div class="input-prepend input-group">
+            <div class="insert-container">
+              <form method="POST" class="form-insert">
+                <input type="hidden" name="type" value="cquery">
+                <input type="text" placeholder="账户号" name="accId" size="5">
+                <input type="text" placeholder="客户ID" name="clientID" size="5">
+                <input type="text" placeholder="客户姓名" name="clientName" size="5">
+                <input type="text" placeholder="开户支行" name="bank" size="8">
+                <input type="text" placeholder="开户时间" name="openDate" size="8">
+                <input type="text" placeholder="账户余额" name="balance" size="5">
+                <input type="text" placeholder="最近访问时间" name="VisitDate" size="10">
+                <input type="text" placeholder="透支额度" name="overDraft" size="5">
+                <button class="btn btn-info" type="submit">查询</button>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-5">
+                  <h4 class="card-title mb-0">支票账户管理</h4>
+                  <div class="small text-muted">2021 6</div>
+                  <div class="small text-muted">日期格式：****-**-** </div>
+                </div>
+                <div class="col-sm-7 d-none d-md-block"> </div>
+              </div>
+              <div>          
+                <div>
+                  <table id="bank-table">
+                    <tr> {% for i in labels2 %}
+                      <th> {{ i }} </th>
+                      {% endfor %}
+                      <th> 操作 </th>
+                    </tr>
+                    {% for i in content2 %}
+                    <tr id="{{ i.Account.A_ID }}">
+                      <td> {{ i[0].A_ID }} </td>
+                      <td> {{ i.Client.C_ID }} </td>
+                      <td> {{ i.Client.C_Name }} </td>
+                      <td> {{ i.Account.B_Name }} </td>
+                      <td> {{ i.Account.Opening_Date }} </td>
+                      <td> {{ i.Account.Balance }} </td>
+                      <td> {{ i.Own.Visited_Date }} </td>
+                      <td> {{ i.CheckingAccount.Overdraft }} </td>
+                      <td><label class="btn btn-success" onclick="openCForm(this.parentNode.parentNode.id)">更新</label>
+                        <label class="btn bg-danger" onclick="openwCForm(this.parentNode.parentNode.id)">删除</label></td>
+                    </tr>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="insert-container">
+              <form method="POST" class="form-insert">
+                <h5 class="card-title mb-0">储蓄账户</h5>
+                <input type="hidden" name="type" value="saddAcc">
+                <input type="text" placeholder="账户号" name="accId" required="" size="5">
+                <input type="text" placeholder="客户ID" name="clientID" required="" size="5">
+                <input type="text" placeholder="开户支行" name="bank" required="" size="5">
+                <input type="text" placeholder="开户时间" name="openDate" required="" size="8">
+                <input type="text" placeholder="账户余额" name="balance" required="" size="8">
+                <input type="text" placeholder="利率" name="interest" required="" size="5">
+                <input type="text" placeholder="货币类型" name="currType" required="" size="8">
+                <button class="btn bg-warning" type="submit">添加</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="insert-container">
+            <form method="POST" class="form-insert">
+              <h5 class="card-title mb-0">支票账户</h5>
+              <input type="hidden" name="type" value="caddAcc">
+              <input type="text" placeholder="账户号" name="accId" required="" size="5">
+              <input type="text" placeholder="客户ID" name="clientID" required="" size="5">
+              <input type="text" placeholder="开户支行" name="bank" required="" size="5">
+              <input type="text" placeholder="开户时间" name="openDate" required="" size="8">
+              <input type="text" placeholder="账户余额" name="balance" required="" size="8">
+              <input type="text" placeholder="透支额度" name="overDraft" required="" size="12">
+              <button class="btn bg-warning" type="submit">添加</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <aside class="aside-menu">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+    </ul>
+  </aside>
+</div>
+</body>
+</html>

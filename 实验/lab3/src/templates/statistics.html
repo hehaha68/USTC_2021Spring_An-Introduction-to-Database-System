@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>银行业务管理系统</title>
+<link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+<link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script> 
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script> 
+<script src="https://cdn.amcharts.com/lib/4/themes/material.js"></script> 
+<script>
+    
+am4core.ready(function () {
+      // 储存 总金额
+
+      var saving_total = am4core.create("saving_total", am4charts.PieChart);
+
+      saving_total.data = [
+      {% for i in bank_list %}
+      {
+        "支行": "{{ i[0] }}",
+        "总金额": {{ i[1] }}
+      }, 
+        {% endfor %}
+      ];
+      
+      var pieSeries = saving_total.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "总金额";
+      pieSeries.dataFields.category = "支行";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
+
+      //储存 用户
+      var saving_users = am4core.create("saving_users", am4charts.PieChart);
+
+      saving_users.data = [
+        {% for i in bank_list %}
+      {
+        "支行": "{{ i[0] }}",
+        "用户": {{ i[3] }}
+      }, 
+        {% endfor %}
+      ];
+      
+      var pieSeries = saving_users.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "用户";
+      pieSeries.dataFields.category = "支行";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
+
+      var debt_total = am4core.create("debt_total", am4charts.PieChart);
+
+      debt_total.data = [
+      {% for i in bank_list %}
+      {
+        "支行": "{{ i[0] }}",
+        "总金额": {{ i[2] }}
+      }, 
+        {% endfor %}
+      ];
+      
+      var pieSeries = debt_total.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "总金额";
+      pieSeries.dataFields.category = "支行";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
+      var debt_users = am4core.create("debt_users", am4charts.PieChart);
+
+      debt_users.data = [
+      {% for i in bank_list %}
+      {
+        "支行": "{{ i[0] }}",
+        "用户": {{ i[4] }}
+      }, 
+        {% endfor %}
+      ];
+      
+      var pieSeries = debt_users.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "用户";
+      pieSeries.dataFields.category = "支行";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
+
+
+    }); // end am4core.ready()
+	
+	function openForm1(key) {
+      document.getElementById("table1").style.display = "block";
+      update_form2.key.value = key;
+    }
+	
+	function openForm2(key) {
+      document.getElementById("table2").style.display = "block";
+      update_form2.key.value = key;
+    }
+	
+	function openForm3(key) {
+      document.getElementById("table3").style.display = "block";
+      update_form2.key.value = key;
+    }
+	
+	function openForm4(key) {
+      document.getElementById("table4").style.display = "block";
+      update_form2.key.value = key;
+    }
+
+
+    function closeForm1() {
+      document.getElementById("table1").style.display = "none";
+    }
+	  
+	function closeForm2() {
+      document.getElementById("table2").style.display = "none";
+    }
+	
+	function closeForm3() {
+      document.getElementById("table3").style.display = "none";
+    }
+	  
+	function closeForm4() {
+      document.getElementById("table4").style.display = "none";
+    }
+	
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span>
+  <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show"> </button>
+  <div class="form-popup" id="table1">
+    <form class="form-container" name="table1" method="POST">
+      <h4>储蓄总金额表格</h4>
+      <table id="bank-table">
+        <tr>
+          <th> 支行名 </th>
+          <th> 总金额 </th>
+        </tr>
+        {% for i in bank_list %}
+        <tr>
+          <td> {{ i[0] }} </td>
+          <td> {{ i[1] }} </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <button type="button" class="btn bg-danger" onclick="closeForm1()">关闭</button>
+    </form>
+  </div>
+  <div class="form-popup" id="table2">
+    <form class="form-container" name="table2" method="POST">
+      <h4>储蓄用户数表格</h4>
+      <table id="bank-table">
+        <tr>
+          <th> 支行名 </th>
+          <th> 用户数 </th>
+        </tr>
+        {% for i in bank_list %}
+        <tr>
+          <td> {{ i[0] }} </td>
+          <td> {{ i[3] }} </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <button type="button" class="btn bg-danger" onclick="closeForm2()">关闭</button>
+    </form>
+  </div>
+  <div class="form-popup" id="table3">
+    <form class="form-container" name="table3" method="POST">
+      <h4>贷款总金额表格</h4>
+      <table id="bank-table">
+        <tr>
+          <th> 支行名 </th>
+          <th> 总贷款 </th>
+        </tr>
+        {% for i in bank_list %}
+        <tr>
+          <td> {{ i[0] }} </td>
+          <td> {{ i[2] }} </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <button type="button" class="btn bg-danger" onclick="closeForm3()">关闭</button>
+    </form>
+  </div>
+  <div class="form-popup" id="table4">
+    <form class="form-container" name="table4" method="POST">
+      <h4>贷款用户数表格</h4>
+      <table id="bank-table">
+        <tr>
+          <th> 支行名 </th>
+          <th> 用户数 </th>
+        </tr>
+        {% for i in bank_list %}
+        <tr>
+          <td> {{ i[0] }} </td>
+          <td> {{ i[4] }} </td>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <button type="button" class="btn bg-danger" onclick="closeForm4()">关闭</button>
+    </form>
+  </div>
+  <form class="date">
+    <input type="hidden" name="isrobot">
+  </form>
+</header>
+<div class="app-body">
+<div class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-title">银行业务管理系统</li>
+      <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="bank"> <i class="nav-icon icon-puzzle"></i> 支行管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="employee"> <i class="nav-icon icon-cursor"></i> 员工管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="client"> <i class="nav-icon icon-cursor"></i> 客户管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="account"> <i class="nav-icon icon-star"></i> 账户管理</a>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="debt"> <i class="nav-icon icon-bell"></i> 贷款管理</a> </li>
+      <li class="nav-item"> <a class="nav-link" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 <span class="badge badge-primary"></span> </a> </li>
+    </ul>
+  </nav>
+  <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>
+<main class="main">
+<div class="container-fluid">
+  <div class="card text-center col-md-4 col-lg-12">
+    <div class="card-body">
+      <form class="date" method="POST" style="float:left">
+        <input type="hidden" name="type" value="year" >
+        <input type="text" name="year1" size="5" >
+        <input class="btn bg-info" type="submit" value="年份">
+      </form>
+      <form class="date" method="POST" style="float:left">
+        <input type="hidden" name="type" value="season">
+        <input type="text" name="year2" size="5" style="margin-left:80px;">
+        年
+        <input type="text" name="season" size="5">
+        季度
+        <input class="btn bg-success" type="submit" value="季度" style="margin-right:80px;">
+      </form>
+      <form class="date" method="POST" style="float:left">
+        <input type="hidden" name="type" value="month">
+        <input type="text" name="year3" size="5">
+        年
+        <input type="text" name="month" size="5">
+        月
+        <input class="btn bg-warning" type="submit" value="月份">
+      </form>
+    </div>
+  </div>
+  <div class="animated fadeIn">
+    <div class="card-columns cols-2">
+      <div class="card">
+        <div class="card-header">储蓄 总金额
+          <div class="card-header-actions"> </div>
+        </div>
+        <div class="card-body">
+          <div class="chartdiv" id="saving_total"></div>
+        </div>
+        <label class="btn btn-success" onclick="openForm1(this.parentNode.parentNode.id)" style='float:right'>表格</label>
+      </div>
+      <div class="card">
+        <div class="card-header">储蓄 用户数
+          <div class="card-header-actions"> </div>
+        </div>
+        <div class="card-body">
+          <div class="chartdiv" id="saving_users"></div>
+        </div>
+        <label class="btn btn-success" onclick="openForm2(this.parentNode.parentNode.id)" style='float:right'>表格</label>
+      </div>
+      <div class="card">
+        <div class="card-header">贷款 总金额
+          <div class="card-header-actions"> </div>
+        </div>
+        <div class="card-body">
+          <div class="chartdiv" id="debt_total"></div>
+        </div>
+        <label class="btn btn-success" onclick="openForm3(this.parentNode.parentNode.id)" style='float:right'>表格</label>
+      </div>
+      <div class="card">
+        <div class="card-header">贷款 用户数
+          <div class="card-header-actions"> </div>
+        </div>
+        <div class="card-body">
+          <div class="chartdiv" id="debt_users"></div>
+        </div>
+        <label class="btn btn-success" onclick="openForm4(this.parentNode.parentNode.id)" style='float:right'>表格</label>
+      </div>
+    </div>
+  </div>
+  </main>
+  <aside class="aside-menu">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+    </ul>
+    
+  </aside>
+</div>
+</body>
+</html>

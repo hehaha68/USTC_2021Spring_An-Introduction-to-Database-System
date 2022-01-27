@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>银行业务管理系统</title>
+<link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<script>
+    function tableFilter() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("prependedInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("bank-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function openForm(key) {
+      var form = document.getElementById("updateForm");
+      form.style.display = "block";
+      update_form.key.value = key;
+    }
+
+    function closeForm() {
+      document.getElementById("updateForm").style.display = "none";
+    }
+
+    function openwForm(key) {
+      document.getElementById("deleteWarning").style.display = "block";
+      delete_form.key.value = key;
+    }
+
+    function closewForm() {
+      document.getElementById("deleteWarning").style.display = "none";
+    } 
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="updateForm">
+  <form class="form-container" name="update_form" method="POST">
+    <h1>更新表单</h1>
+    <input type="hidden" name="key" value="">
+    <input type="hidden" name="type" value="update">
+    <label for="email"><b>支行编号</b></label>
+    <input type="text" placeholder="支行编号" name="branchNum" required="">
+    <label for="email"><b>支行名</b></label>
+    <input type="text" placeholder="支行名" name="bank_name" required="">
+    <label for="email"><b>支行资产</b></label>
+    <input type="text" placeholder="支行资产" name="bank_asset" required="">
+    <label for="email"><b>所在城市</b></label>
+    <input type="text" placeholder="所在城市" name="bank_city" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning">
+  <form class="form-container" name="delete_form" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm();">取消</button>
+  </form>
+</div>
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span> </header>
+<div class="app-body">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+        <li class="nav-title">银行业务管理系统</li>
+        <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a> <a class="nav-link" href="bank"> <i class="nav-icon icon-pie-chart"></i> 支行管理</a>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="employee"> <i class="nav-icon icon-cursor"></i> 员工管理</a> </li>
+        <li class="nav-item"> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="client"> <i class="nav-icon icon-puzzle"></i> 客户管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="account"> <i class="nav-icon icon-star"></i> 账户管理</a> </li>
+        <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="debt"> <i class="nav-icon icon-bell"></i> 贷款管理</a> </li>
+        <li class="nav-item"> <a class="nav-link nav-dropdown-toggle" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 </a> </li>
+      </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+  </div>
+  <main class="main">
+    <div class="container-fluid">
+      <div class="animated fadeIn">
+        <div class="input-prepend input-group">
+          <div class="input-group-prepend">
+            <div class="insert-container">
+              <form class="form-insert" method="POST">
+                <input type="hidden" name="type" value="query">
+                <input type="text" placeholder="支行号" name="id">
+                <input type="text" placeholder="支行名" name="name">
+                <input type="text" placeholder="支行资产" name="assets">
+                <input type="text" placeholder="所在城市" name="city">
+                <button class="btn btn-info" type="submit">查询</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-5">
+                <h4 class="card-title mb-0">支行信息</h4>
+                <div class="small text-muted">2021 6</div>
+              </div>
+            </div>
+            <div>             
+              <div>
+                <table id="bank-table">
+                  <tr> {% for i in labels %}
+                    <th> {{ i }} </th>
+                    {% endfor %}
+                    <th>操作</th>
+                  </tr>
+                  {% for i in content %}
+                  <tr id="{{ i.B_ID }}">
+                    <td> {{ i.B_ID }} </td>
+                    <td> {{ i.B_Name }} </td>
+                    <td> {{ i.Assets }} </td>
+                    <td> {{ i.City }} </td>
+                    <td><label class="btn btn-success" onclick="openForm(this.parentNode.parentNode.id)">更新</label>
+                      <label class="btn bg-danger" onclick="openwForm(this.parentNode.parentNode.id)">删除</label></td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="insert">
+              <input type="text" placeholder="支行号" name="id" required="">
+              <input type="text" placeholder="支行名" name="name" required="">
+              <input type="text" placeholder="支行资产" name="estate" required="">
+              <input type="text" placeholder="所在城市" name="city" required="" size="14">
+              <button class="btn btn-warning" type="submit">添加</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <aside class="aside-menu">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+      <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+    </ul>    
+  </aside>
+</div>
+</body>
+</html>

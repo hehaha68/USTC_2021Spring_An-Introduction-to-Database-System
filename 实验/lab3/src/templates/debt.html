@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>银行业务管理系统</title>
+<link href="/static/style1.css" rel="stylesheet">
+<script>
+    function tableFilter() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("prependedInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("bank-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function openForm(key) {
+      document.getElementById("updateForm").style.display = "block";
+      update_form.key.value = key;
+    }
+
+    function closeForm() {
+      document.getElementById("updateForm").style.display = "none";
+    }
+
+    function openwForm(key) {
+      document.getElementById("deleteWarning").style.display = "block";
+      delete_form.key.value = key;
+    }
+
+    function closewForm() {
+      document.getElementById("deleteWarning").style.display = "none";
+    }
+  </script>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="updateForm">
+  <form class="form-container" name="update_form" method="POST">
+    <h1>更新表单</h1>
+    <input type="hidden" name="key" value="">
+    <input type="hidden" name="type" value="update">
+    <label for="email"><b>支付金额</b></label>
+    <input type="text" placeholder="支付金额" name="money" required="">
+    <label for="email"><b>支付日期</b></label>
+    <input type="text" placeholder="支付日期" name="date" required="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm()">取消</button>
+  </form>
+</div>
+<div class="form-popup" id="deleteWarning">
+  <form class="form-container" name="delete_form" method="POST">
+    <p> </p>
+    <h2>确认删除？</h2>
+    <p> </p>
+    <p> </p>
+    <input type="hidden" name="type" value="delete">
+    <input type="hidden" name="key" value="">
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closewForm();">取消</button>
+  </form>
+</div>
+<header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span> </header>
+<div class="app-body">
+<div class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-title">银行业务管理系统</li>
+      <a class="nav-link" href="index"> <i class="nav-icon icon-speedometer"></i> 首页 </a>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="bank"> <i class="nav-icon icon-puzzle"></i> 支行管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="employee"> <i class="nav-icon icon-cursor"></i> 员工管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="client"> <i class="nav-icon icon-puzzle"></i> 客户管理</a> </li>
+      <li class="nav-item nav-dropdown"> <a class="nav-link nav-dropdown-toggle" href="account"> <i class="nav-icon icon-star"></i> 账户管理</a> </li>
+      <li class="nav-item"> <a class="nav-link" href="debt"> <i class="nav-icon icon-pie-chart"></i> 贷款管理</a> </li>
+      <li class="nav-item"> <a class="nav-link nav-dropdown-toggle" href="statistics"> <i class="nav-icon icon-speedometer"></i> 业务统计 <span class="badge badge-primary"></span> </a> </li>
+    </ul>
+  </nav>
+  <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>
+<main class="main">
+  <div class="container-fluid">
+    <div class="animated fadeIn">
+      <div class="input-prepend input-group">
+        <div class="insert-container">
+          <form class="form-insert" method="POST">
+            <input type="hidden" name="type" value="main_query">
+            <input type="text" placeholder="贷款号" name="num" size="8">
+            <input type="text" placeholder="发放支行" name="bank" size="8">
+            <input type="text" placeholder="贷款金额" name="money" size="8">
+            <input type="text" placeholder="贷款状态" name="state" size="8">
+            <button class="btn btn-info" type="submit">查询</button>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <h4 class="card-title mb-0">贷款管理</h4>
+              <div class="small text-muted">2021 6</div>
+              <div class="small text-muted">日期格式：****-**-** </div>
+              <div class="small text-muted">贷款状态： 0 - 未发放; 1: 发放中; 2: 发放完毕; 3: 异常; </div>
+            </div>
+          </div>
+          <div> 
+            <div>
+              <table id="bank-table">
+                <tr> {% for i in labels1 %}
+                  <th> {{ i }} </th>
+                  {% endfor %}
+                  <th>操作</th>
+                </tr>
+                {% for i in content1 %}
+                <tr id="{{ i.L_ID }}">
+                  <td> {{ i.L_ID }} </td>
+                  <td> {{ i.B_Name }} </td>
+                  <td> {{ i.L_Amount }} </td>
+                  <td> {{ i.L_Status }} </td>
+                  <td><label class="btn bg-danger" onclick="openwForm(this.parentNode.parentNode.id)">删除</label></td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="insert-container">
+          <form class="form-insert" method="POST">
+            <input type="hidden" name="type" value="insert">
+            <input type="text" placeholder="贷款号" name="num" required="">
+            <input type="text" placeholder="发放支行" name="bank" required="">
+            <input type="text" placeholder="贷款金额" name="money" required="">
+            <button class="btn bg-warning" type="submit">添加</button>
+          </form>
+        </div>
+      </div>
+      <div class="insert-container">
+        <div class="input-prepend input-group">
+          <div class="insert-container">
+            <form class="form-insert" method="POST">
+              <input type="hidden" name="type" value="query">
+              <input type="text" placeholder="贷款号" name="loanNum" size="8">
+              <input type="text" placeholder="客户ID" name="clientID" size="8">
+              <input type="text" placeholder="支付号" name="payID" size="8">
+              <input type="text" placeholder="支付金额" name="money" size="8">
+              <input type="text" placeholder="支付日期" name="date" size="8">
+              <button class="btn btn-info" type="submit">查询</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-5">
+              <h4 class="card-title mb-0">支付记录</h4>
+              <div class="small text-muted">2021 6</div>
+            </div>
+          </div>
+          <div> 
+            <table id="bank-table">
+              <tr> {% for i in labels2 %}
+                <th> {{ i }} </th>
+                {% endfor %}
+                <th>操作</th>
+              </tr>
+              {% for i in content2 %}
+              <tr id="{{ i.P_ID }}">
+                <td> {{ i.P_ID }} </td>
+                <td> {{ i.L_ID }} </td>
+                <td> {{ i.C_ID }} </td>
+                <td> {{ i.P_Amount }} </td>
+                <td> {{ i.Pay_Date }} </td>
+                <td><label class="btn btn-success" onclick="openForm(this.parentNode.parentNode.id)">更新</label></td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="insert-container">
+        <form class="form-insert" method="POST">
+          <input type="hidden" name="type" value="give">
+          <input type="text" placeholder="待发放贷款号" name="loanNum" required="">
+          <input type="text" placeholder="发放客户ID" name="clientID" required="">
+          <input type="text" placeholder="支付号" name="payID" required="">
+          <input type="text" placeholder="发放日期" name="date" required="">
+          <input type="text" placeholder="发放金额" name="money" required="">
+          <button class="btn bg-warning" type="submit">发放</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+<aside class="aside-menu">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"> <i class="icon-list"></i> </a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages" role="tab"> <i class="icon-speech"></i> </a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab"> <i class="icon-settings"></i> </a> </li>
+  </ul>
+  
+</aside>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<base href="./">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>银行业务管理系统</title>
+<style>
+.author1 {
+    width: 190px;
+    height: 80px;
+    float: right
+}
+</style>
+<link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet">
+<link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
+<script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-118965717-3');
+      gtag('config', 'UA-118965717-5');
+		
+	  function openForm() {
+      var form = document.getElementById("signupForm");
+      form.style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("signupForm").style.display = "none";
+    }
+    </script>
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div class="form-popup" id="signupForm">
+  <form class="form-container" name="signupForm" method="POST">
+    <h3>注册</h3>
+    <input type="hidden" name="type" value="signup">
+    用户名：
+    <input type="text" name="name" size="15" >
+    <br>
+    密码：&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="text" name="password" size="15" >
+    <br>
+    <button type="submit" class="btn btn-success" value="Refresh Page" onclick="window.location.reload();">确认</button>
+    <button type="button" class="btn bg-danger" onclick="closeForm()">取消</button>
+  </form>
+</div>
+<header class="app-header navbar">
+  <header class="app-header navbar"><span class="badge badge-light">数据库系统及应用Lab</span></header>
+</header>
+<div class="app-body">
+<div class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-title">银行业务管理系统</li>
+      <a class="nav-link" href="login"> <i class="nav-icon icon-speedometer"></i> 登录 </a>
+    </ul>
+  </nav>
+  <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>
+<main class="main">
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="row"> </div>
+    <!-- /.row-->
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-5 col-lg-6">
+            <div class="clearfix">
+              <h1 class="pt-3" >银行业务管理系统</h1>
+              <span class="badge badge-danger">Version 1.0</span>
+              <p class="text-muted"></p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrapper" style="height:430px;margin-top:20px;">
+          <div style="width:100%;text-align:center">
+            <form class="date" method="POST">
+              <br>
+              <br>
+              <br>
+              <br>
+              <br>
+              <input type="hidden" name="type" value="login" >
+              用户名：
+              <input type="text" name="name" size="20" >
+              <br>
+              密码：&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="text" name="password" size="20" >
+              <br>
+              <br>
+              <input class="btn bg-warning" onclick="openForm()" value="注册" size="1">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input class="btn bg-info" type="submit" value="登录" >
+            </form>
+          </div>
+        </div>
+        <div class="author1">
+          <p class="text-muted">和泳毅 PB19010450</p>
+          <p class="text-muted" >vagabond@mail.ustc.edu.cn</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
